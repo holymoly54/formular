@@ -1,0 +1,311 @@
+<!-- <html>
+    <head>
+        <style>
+            body {
+                background-color: #d3ffff;
+            }
+            form {
+                padding: 30px;
+            }
+
+            .info {
+                font-size: small;
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+            <label>Jméno</label>
+            <input type="text" placeholder="Zadej jmeno" required>
+            <br>
+            <p class="info">*povinné pole<p>
+
+            <br><br>
+
+            <label>E-mail</label>
+            <input type="text" placeholder="example@gmail.com" required>
+            <p class="info">*povinné pole</p>
+
+            <br><br>
+
+            <label>Telefon</label>
+            <input type="tel" placeholder="+420 123 456 789" required>
+            <p class="info">*povinné pole</p>
+            <br><br>
+
+            <label>Věk</label>
+            <input type="number" placeholder="18+" min="18" required>
+            <p class="info">*povinné pole</p>
+
+            <br><br>
+
+            <button>Odeslat</button>
+        </form>
+    </body>
+</html> !-->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bezpečný formulář</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #c8f7ff, #e8d9ff);
+        }
+
+        .form-box {
+            background: white;
+            width: 400px;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #6c63ff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(108,99,255,0.3);
+        }
+
+        .info {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #6c63ff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #574bdb;
+            transform: scale(1.02);
+        }
+
+    </style>
+</head>
+
+<body>
+
+<form class="form-box" id="myForm">
+
+    <h1>Registrace</h1>
+
+    <!-- JMÉNO -->
+    <div class="input-group">
+
+        <label>Jméno</label>
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Zadej jméno"
+            minlength="2"
+            maxlength="30"
+            required
+        >
+
+        <p class="info">
+            * Pouze písmena a mezery
+        </p>
+
+        <div class="error" id="nameError"></div>
+
+    </div>
+
+    <!-- EMAIL -->
+    <div class="input-group">
+
+        <label>E-mail</label>
+
+        <input
+            type="email"
+            placeholder="example@gmail.com"
+            maxlength="50"
+            required
+        >
+
+        <p class="info">
+            * Zadej platný email
+        </p>
+
+    </div>
+
+    <!-- TELEFON -->
+    <div class="input-group">
+
+        <label>Telefon</label>
+
+        <input
+            type="tel"
+            id="phone"
+            placeholder="+420 123 456 789"
+            maxlength="17"
+            required
+        >
+
+        <p class="info">
+            * Pouze čísla
+        </p>
+
+    </div>
+
+    <!-- VĚK -->
+    <div class="input-group">
+
+        <label>Věk</label>
+
+        <input
+            type="number"
+            placeholder="18+"
+            min="18"
+            max="120"
+            required
+        >
+
+        <p class="info">
+            * Pouze 18+
+        </p>
+
+    </div>
+
+    <button type="submit">
+        Odeslat
+    </button>
+
+</form>
+
+<script>
+
+    // =========================
+    // JMÉNO
+    // =========================
+
+    const nameInput = document.getElementById("name");
+    const nameError = document.getElementById("nameError");
+
+    // blokace nepovolených znaků při psaní
+    nameInput.addEventListener("keypress", function(e) {
+
+        const char = String.fromCharCode(e.which);
+
+        // povolí jen písmena a mezery
+        if (!/[A-Za-zÁ-ž\s]/.test(char)) {
+            e.preventDefault();
+        }
+
+    });
+
+    // ochrana proti vložení textu (copy paste)
+    nameInput.addEventListener("input", function() {
+
+        let clean = this.value.replace(/[^A-Za-zÁ-ž\s]/g, '');
+
+        // odstranění slova script
+        clean = clean.replace(/script/gi, '');
+
+        this.value = clean;
+
+    });
+
+
+    // =========================
+    // TELEFON
+    // =========================
+
+    const phoneInput = document.getElementById("phone");
+
+    // povolí jen čísla, + a mezery
+    phoneInput.addEventListener("input", function() {
+
+        this.value = this.value.replace(/[^0-9+\s]/g, '');
+
+    });
+
+
+    // =========================
+    // FORM VALIDACE
+    // =========================
+
+    const form = document.getElementById("myForm");
+
+    form.addEventListener("submit", function(e) {
+
+        const dangerous =
+            /<|>|script|SELECT|INSERT|DELETE|DROP|--/i;
+
+        if (dangerous.test(nameInput.value)) {
+
+            e.preventDefault();
+
+            nameError.textContent =
+                "Nepovolené znaky.";
+
+        } else {
+
+            nameError.textContent = "";
+
+        }
+
+    });
+
+
+</script>
+
+</body>
+</html>
